@@ -3,8 +3,6 @@
 // Execute `rustlings hint iterators4` or use the `hint` watch subcommand for a
 // hint.
 
-// I AM NOT DONE
-
 pub fn factorial(num: u64) -> u64 {
     // Complete this function to return the factorial of num
     // Do not use:
@@ -13,15 +11,16 @@ pub fn factorial(num: u64) -> u64 {
     // - imperative style loops (for, while)
     // - additional variables
     // *** answer 1 ***
-    match num {
-        n if n == 0 => 1,
-        n if n > 1 => num * factorial(n - 1),
-        _ => num
-    }
+    // match num {
+    //     n if n == 0 => 1,
+    //     n if n > 1 => num * factorial(n - 1),
+    //     _ => num
+    // }
     // For an extra challenge, don't use:
     // - recursion
     // *** anwser 2 ***
-    // [..=(num as i64)].iter().fold(num, |acc,n| acc * (num - 1))
+    // (1..=num).product()
+    (1..=num).fold(1, |acc,n| acc * n)
     // Execute `rustlings hint iterators4` for hints.
 
 }
