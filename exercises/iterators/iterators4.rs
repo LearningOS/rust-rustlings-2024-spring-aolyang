@@ -12,9 +12,18 @@ pub fn factorial(num: u64) -> u64 {
     // Try not to use:
     // - imperative style loops (for, while)
     // - additional variables
+    // *** answer 1 ***
+    match num {
+        n if n == 0 => 1,
+        n if n > 1 => num * factorial(n - 1),
+        _ => num
+    }
     // For an extra challenge, don't use:
     // - recursion
+    // *** anwser 2 ***
+    // [..=(num as i64)].iter().fold(num, |acc,n| acc * (num - 1))
     // Execute `rustlings hint iterators4` for hints.
+
 }
 
 #[cfg(test)]
