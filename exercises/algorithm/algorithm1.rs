@@ -23,19 +23,19 @@ impl<T> Node<T> {
     }
 }
 #[derive(Debug)]
-struct LinkedList<T> {
+struct LinkedList<T: PartialOrd<T>> {
     length: u32,
     start: Option<NonNull<Node<T>>>,
     end: Option<NonNull<Node<T>>>,
 }
 
-impl<T> Default for LinkedList<T> {
+impl<T: PartialOrd<T> + Clone> Default for LinkedList<T> {
     fn default() -> Self {
         Self::new()
     }
 }
 
-impl<T> LinkedList<T> {
+impl<T: PartialOrd<T> + Clone> LinkedList<T> {
     pub fn new() -> Self {
         Self {
             length: 0,
@@ -71,16 +71,39 @@ impl<T> LinkedList<T> {
     }
 	pub fn merge(list_a:LinkedList<T>,list_b:LinkedList<T>) -> Self
 	{
-		//TODO
-		Self {
-            length: 0,
-            start: None,
-            end: None,
+        // TODO 没吃透类型
+		let mut list_merged = LinkedList::<T>::new();
+
+        let mut a_node = &list_a.start;
+        let mut b_node = &list_b.start;
+
+        while a_node.is_some() && b_node.is_some() {
+            let val_a = unsafe { &(a_node.unwrap().as_ref()).val };
+            let val_b = unsafe { &(b_node.unwrap().as_ref()).val };
+            if val_a < val_b {
+                list_merged.add(val_a.clone());
+                a_node = unsafe { &(a_node.unwrap().as_ref()).next };
+            } else {
+                list_merged.add(val_b.clone());
+                b_node = unsafe { &(b_node.unwrap().as_ref()).next }
+            }
         }
+
+        while let Some(node) = a_node {
+            let val = unsafe { &(node.as_ref()).val };
+            list_merged.add(val.clone());
+            a_node = unsafe { &(node.as_ref()).next };
+        }
+        while let Some(node) = b_node {
+            let val = unsafe { &(node.as_ref()).val };
+            list_merged.add(val.clone());
+            b_node = unsafe { &(node.as_ref()).next };
+        }
+        list_merged
 	}
 }
 
-impl<T> Display for LinkedList<T>
+impl<T: PartialOrd<T>> Display for LinkedList<T>
 where
     T: Display,
 {
